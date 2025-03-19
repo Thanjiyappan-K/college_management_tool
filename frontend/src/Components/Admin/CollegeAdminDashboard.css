@@ -1,0 +1,293 @@
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Changed from height: 100% to min-height: 100vh */
+    width: 100vw; /* Added to ensure full width */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+    background: linear-gradient(135deg, #e0f2f7, #f0f8ff); /* Subtle gradient background */
+    background-size: cover; /* Changed from 100% to cover */
+    position: fixed; /* Added to ensure it stays fixed */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden; /* Prevent scrolling on the container itself */
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px; /* Increased padding for better spacing */
+    background: linear-gradient(to right, #004080, #0056b3); /* Gradient header */
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Increased gap */
+}
+
+.search-bar {
+    padding: 8px 12px; /* Increased padding */
+    border-radius: 20px; /* Rounded corners */
+    border: 1px solid #ddd; /* Light border */
+    width: 250px; /* Wider search bar */
+    transition: border-color 0.3s ease; /* Smooth transition */
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: #0056b3; /* Highlight on focus */
+}
+
+.icon {
+    cursor: pointer;
+    font-size: 20px; /* Slightly larger icons */
+    transition: transform 0.2s ease;
+}
+
+.icon:hover {
+    transform: scale(1.1); /* Slight scaling on hover */
+}
+
+.notification-badge {
+    background-color: #ff4d4f; /* Brighter red */
+    color: white;
+    padding: 4px 8px; /* Adjusted padding */
+    border-radius: 50%;
+    font-size: 12px;
+    position: relative;
+    top: -8px; /* Slightly raise the badge */
+    right: -5px;
+}
+
+.admin-profile {
+    background-color: #56d4e5; /* Light background */
+    color: #0056b3;
+    padding: 10px 14px; /* Adjusted padding */
+    border-radius: 50%;
+    font-weight: 600; /* Semi-bold */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: background-color 0.3s ease;
+}
+.admin-profile:hover{
+    background-color: #b3e5fc;
+}
+
+.dashboard-body {
+    display: flex;
+    flex: 1;
+    overflow:hidden; /* Prevent horizontal scrolling */
+    
+}
+
+.sidebar {
+    width: 250px; /* Increased sidebar width */
+    background-color: #c009c7;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    transition: width 0.3s ease; /* Smooth transition */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin: 12px 0; /* Adjusted margin */
+}
+
+.sidebar li button {
+    width: 100%;
+    padding: 12px 15px; /* Adjusted padding */
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 8px; /* Rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+.sidebar li button:hover {
+    background-color: #86e2fc; /* Light hover background */
+}
+
+.sidebar li.active button {
+    background-color: #0056b3;
+    color: rgb(147, 155, 158);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Subtle shadow for active button */
+}
+
+.main-content {
+    flex: 1;
+    padding: 30px; /* Increased padding */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+    width: 100px; /* Reduced sidebar width on smaller screens */
+    padding: 10px;
+    }
+
+    .sidebar li button {
+    padding: 8px 10px; /* Adjusted padding for smaller screens */
+    font-size: 0.9em;
+    }
+    .search-bar{
+    width: 150px;
+    }
+}
+/* Dashboard Overview Styles */
+.dashboard-overview {
+padding: 0px;
+background-color: lemonchiffon;
+border-radius: 0px;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+gap: 20px;
+margin-top: 20px;
+}
+
+.stat-card {
+background-color: white;
+border-radius: 8px;
+padding: 15px;
+display: flex;
+align-items: center;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+transition: transform 0.2s ease-in-out;
+}
+
+.stat-card:hover {
+transform: translateY(-5px);
+}
+
+.stat-icon {
+font-size: 24px;
+width: 50px;
+height: 50px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+margin-right: 15px;
+flex-shrink: 0;
+}
+
+.student-icon {
+background-color: #e3f2fd;
+color: #1976d2;
+}
+
+.teacher-icon {
+background-color: #5dc465;
+color: #388e3c;
+}
+
+.fee-icon {
+background-color: #fff8e1;
+color: #f57c00;
+}
+
+.event-icon {
+background-color: #f3e5f5;
+color: #8e24aa;
+}
+
+.announcement-icon {
+background-color: #fbe9e7;
+color: #d84315;
+}
+
+.attendance-icon {
+background-color: #e0f7fa;
+color: #00acc1;
+}
+
+.exam-icon {
+background-color: #f1f8e9;
+color: #689f38;
+}
+
+.stat-content {
+flex-grow: 1;
+}
+
+.stat-content h3 {
+font-size: 14px;
+margin: 0 0 8px 0;
+color: #4a88d3;
+}
+
+.stat-value {
+font-size: 24px;
+font-weight: bold;
+margin: 0;
+color: #202124;
+}
+
+.quick-actions {
+margin-top: 30px;
+}
+
+.action-buttons {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-top: 15px;
+}
+
+.action-btn {
+padding: 10px 20px;
+background-color: #1976d2;
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-weight: 500;
+transition: background-color 0.2s;
+}
+
+.action-btn:hover {
+background-color: #1565c0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+.stats-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+
+.stat-card {
+    flex-direction: column;
+    text-align: center;
+}
+
+.stat-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+}
+}
+
+.dashboard-main {
+    flex: 1;
+    display: flex;
+    overflow: hidden; /* Contains the scrolling */
+}
+
+.dashboard-content {
+    flex: 1;
+    overflow-y: auto; /* Allow scrolling in the content area */
+    padding: 20px;
+    background-color: #e9d6a2;
+}

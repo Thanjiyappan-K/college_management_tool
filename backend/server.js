@@ -11,7 +11,6 @@ const mysql = require("mysql2");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -74,14 +73,16 @@ app.post("/login", (req, res) => {
   });
 });
 
+
 // Protected route to get users
 app.get("/users", verifyToken, (req, res) => {
-  const sql = "SELECT id, name, email, role FROM users";
+  const sql = "SELECT id, name, email, role FROM admins";
   db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ message: "Error fetching users" });
     res.json(results);
   });
 });
+
 
 // Protected route to create user
 app.post("/create-user", verifyToken, async (req, res) => {

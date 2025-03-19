@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 
-const Login = () => {
+const UserLogin = () => {
   let Navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
@@ -14,10 +14,10 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/login", formData);
+      const res = await axios.post("http://localhost:5000/user", formData);
       localStorage.setItem("token", res.data.token);
       alert(res.data.message);
-      Navigate("/admin");
+      Navigate("/teacher");
 
       }
      catch (err) {
@@ -221,4 +221,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default UserLogin;
