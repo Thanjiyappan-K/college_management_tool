@@ -10,13 +10,14 @@ const Home = () => {
       <header className="home-header">
         <h1>Welcome to Our Platform</h1>
         <p>Select your role to proceed</p>
+        <h1>hello</h1>
       </header>
 
       <div className="user-selection">
         <button className="btn admin-btn" onClick={() => navigate("/login")}>
           Admin Login
         </button>
-        <button className="btn user-btn" onClick={() => navigate("/user")}>
+        <button className="btn user-btn" onClick={() => navigate("/loginuser")}>
           User Login
         </button>
       </div>

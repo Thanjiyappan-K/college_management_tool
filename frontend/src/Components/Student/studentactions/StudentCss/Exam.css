@@ -1,0 +1,43 @@
+.exams-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.upcoming-exams, .grades-section {
+    margin-top: 20px;
+}
+
+.exams-table, .grades-table {
+    width:100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.exams-table th, .grades-table th, .exams-table td, .grades-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.exams-table th, .grades-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.exams-table tr:nth-child(even), .grades-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.btn-small {
+    padding: 5px 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-small:hover {
+    background-color: #218838;
+}

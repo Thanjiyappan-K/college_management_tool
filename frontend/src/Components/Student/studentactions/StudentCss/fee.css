@@ -1,0 +1,133 @@
+.fees-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .fees-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .fee-overview {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .fee-stat {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    border-radius: 6px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0 10px;
+  }
+  
+  .fee-stat span {
+    display: block;
+    color: #666;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .fee-amount {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .total-fees .fee-amount { color: #28a745; }
+  .paid-fees .fee-amount { color: #17a2b8; }
+  .outstanding-fees .fee-amount { color: #dc3545; }
+  
+  .fee-breakdown {
+    margin-bottom: 20px;
+  }
+  
+  .fees-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  
+  .fees-table th {
+    background-color: #f1f3f5;
+    color: #495057;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .fees-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .status-badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+  
+  .status-badge.paid {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .status-badge.outstanding {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .payment-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-pay-single {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+  }
+  
+  .btn-primary {
+    background-color: #28a745;
+    height: 70px;
+    color: white;
+  }
+  
+  .btn-primary:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  .btn-secondary {
+    height: 70px;
+    background-color: #17a2b8;
+    color: white;
+  }
+  
+  .btn-pay-single {
+    background-color: #ffc107;
+    color: #212529;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+  }
+  
+  .btn-primary:hover, .btn-secondary:hover, .btn-pay-single:hover {
+    opacity: 0.9;
+  }

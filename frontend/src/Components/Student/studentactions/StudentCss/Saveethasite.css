@@ -1,0 +1,34 @@
+.sites-container {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .sites-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .site-card {
+    background-color: #f8f9fa;
+    background-image: url("https://lms2.ai.saveetha.in/theme/image.php/classic/core/1741410694/moodlelogo_grayhat");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position:center;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    height: 200px;
+    text-align: center;
+    transition: transform 0.2s ease-in-out, background-color 0.3s;
+  }
+  
+  .site-card:hover {
+    transform: scale(1.05);
+    background-color: #e9ecef;
+    cursor: pointer;
+  }
+  

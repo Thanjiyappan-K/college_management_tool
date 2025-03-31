@@ -1,0 +1,151 @@
+/* Container Styling */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f7fc;
+}
+
+/* Form Box */
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Header Styles */
+.header {
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.divider {
+    width: 50px;
+    height: 3px;
+    background: #4f46e5;
+    margin: 8px auto;
+    border-radius: 5px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #777;
+}
+
+/* Form Fields */
+.form-group {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border 0.3s ease;
+}
+
+.input:focus {
+    border-color: #4f46e5;
+    outline: none;
+}
+
+/* Remember Me & Forgot Password */
+.checkbox-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox {
+    margin-right: 5px;
+}
+
+.link {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* Button */
+.button {
+    width: 100%;
+    background: #4f46e5;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.button:hover {
+    background: #3a36db;
+}
+
+.button:disabled {
+    background: #6c63ff;
+    cursor: not-allowed;
+}
+
+/* Error Message */
+.error-message {
+    background: #ffdddd;
+    color: #ff0000;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 20px;
+    }
+    
+    .title {
+        font-size: 22px;
+    }
+    
+    .input {
+        font-size: 14px;
+    }
+    
+    .button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
