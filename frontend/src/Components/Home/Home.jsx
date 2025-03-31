@@ -10,6 +10,13 @@ const Home = () => {
       <header className="home-header">
         <h1>Welcome to Our Platform</h1>
         <p>Select your role to proceed</p>
+        <h2>credentials</h2>
+        <h3>admin@gmail.com </h3>
+        <h3>1234567</h3>
+
+        <h2>user</h2>
+        <h3>students@gmail.com  - 1234567</h3>
+        <h3>teachers@gmail.com - 1234567 </h3>
       </header>
 
       <div className="user-selection">
