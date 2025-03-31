@@ -10,7 +10,6 @@ const Home = () => {
       <header className="home-header">
         <h1>Welcome to Our Platform</h1>
         <p>Select your role to proceed</p>
-        <h1>hello</h1>
       </header>
 
       <div className="user-selection">
