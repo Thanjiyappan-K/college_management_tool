@@ -7,6 +7,7 @@ import MyCourses from './studentactions/MyCourses';
 import AttendanceRecord from './studentactions/AttendanceRecord';
 import AssignmentsSection from './studentactions/AssignmentsSection';
 import ExamsAndGrades from './studentactions/ExamsAndGrades';
+import SlotBooking from './studentactions/SlotBooking';
 import LibrarySection from './studentactions/LibrarySection';
 import FeeDetails from './studentactions/FeeDetails';
 import CommunicationCenter from './studentactions/CommunicationCenter';
@@ -36,6 +37,7 @@ const StudentDashboard = () => {
       case 'attendance': return <AttendanceRecord />;
       case 'assignments': return <AssignmentsSection />;
       case 'exams': return <ExamsAndGrades />;
+      case 'slotbooking': return <SlotBooking/>;
       case 'library': return <LibrarySection />;
       case 'communication': return <CommunicationCenter />;
       case 'fees': return <FeeDetails />;
@@ -101,6 +103,12 @@ const StudentDashboard = () => {
               <button onClick={() => setActiveTab('exams')}>
                 <Users className="nav-icon" />
                 <span style={{color:"blue"}}>Exams & Grades</span>
+              </button>
+            </li>
+            <li className={activeTab === 'slotbooking' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('slotbooking')}>
+                <Users className="nav-icon" />
+                <span style={{color:"blue"}}>Slot-Booking</span>
               </button>
             </li>
             <li className={activeTab === 'library' ? 'active' : ''}>

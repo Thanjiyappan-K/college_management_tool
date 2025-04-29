@@ -1,46 +1,305 @@
+// require("dotenv").config();
+
+// // Add this check after dotenv config
+// if (!process.env.JWT_SECRET) {
+//   console.error("JWT_SECRET is not defined in .env file");
+//   process.exit(1);
+// }
+
+// const express = require("express");
+// const mysql = require("mysql2");
+// const cors = require("cors");
+// const bcrypt = require("bcryptjs");
+// const jwt = require("jsonwebtoken");
+// const app = express();
+// app.use(express.json());
+// app.use(cors());
+
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "thanji830",
+//   database: "collegetool",
+// });
+
+// db.connect((err) => {
+//   if (err) throw err;
+//   console.log("Connected to MySQL Database");
+// });
+
+// // Middleware to verify JWT token
+// const verifyToken = (req, res, next) => {
+//   const token = req.headers['authorization']?.split(' ')[1];
+//   if (!token) return res.status(403).json({ message: "No token provided" });
+
+//   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+//     if (err) return res.status(500).json({ message: "Failed to authenticate token" });
+//     req.userId = decoded.id;
+//     req.userRole = decoded.role;
+//     next();
+//   });
+// };
+
+// // Register Admin (Site or College)
+// app.post("/register", async (req, res) => {
+//   const { name, email, password, role } = req.body;
+//   if (!["site_admin", "college_admin"].includes(role)) {
+//     return res.status(400).json({ message: "Invalid role" });
+//   }
+
+//   const hashedPassword = await bcrypt.hash(password, 10);
+//   const sql = "INSERT INTO admins (name, email, password, role) VALUES (?, ?, ?, ?)";
+  
+//   db.query(sql, [name, email, hashedPassword, role], (err, result) => {
+//     if (err) return res.status(500).json({ message: "Error registering admin" });
+//     res.json({ message: "Admin registered successfully" });
+//   });
+// });
+
+// // Login Admin
+// app.post("/login", (req, res) => {
+//   const { email, password } = req.body;
+//   const sql = "SELECT * FROM admins WHERE email = ?";
+  
+//   db.query(sql, [email], async (err, results) => {
+//     if (err || results.length === 0) return res.status(401).json({ message: "Invalid credentials" });
+
+//     const admin = results[0];
+//     const isMatch = await bcrypt.compare(password, admin.password);
+//     if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+
+//     const token = jwt.sign({ id: admin.id, role: admin.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+//     res.json({ message: "Login successful", token });
+//   });
+// });
+
+// //Admin Adding users
+// app.post("/create-user", (req, res) => {
+//   const { name, email, password, role } = req.body;
+  
+//   // Basic validation
+//   if (!name || !email || !password || !role) {
+//     return res.status(400).json({ message: "All fields are required" });
+//   }
+  
+//   // Check if email already exists
+//   const checkEmailSql = "SELECT * FROM users WHERE email = ?";
+//   db.query(checkEmailSql, [email], (err, results) => {
+//     if (err) {
+//       console.error("Database error:", err);
+//       return res.status(500).json({ message: "Server error" });
+//     }
+    
+//     if (results.length > 0) {
+//       return res.status(409).json({ message: "Email already in use" });
+//     }
+    
+//     // Email doesn't exist, proceed with insertion
+//     const insertSql = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
+//     db.query(insertSql, [name, email, password, role], (insertErr, result) => {
+//       if (insertErr) {
+//         console.error("Error creating user:", insertErr);
+//         return res.status(500).json({ message: "Failed to create user" });
+//       }
+      
+//       return res.status(201).json({ 
+//         message: "User created successfully", 
+//         userId: result.insertId 
+//       });
+//     });
+//   });
+// });
+
+// // Endpoint to fetch all users
+// app.get("/users", (req, res) => {
+//   const sql = "SELECT id, name, email, role FROM users";
+  
+//   db.query(sql, (err, results) => {
+//     if (err) {
+//       console.error("Error fetching users:", err);
+//       return res.status(500).json({ message: "Failed to fetch users" });
+//     }
+    
+//     return res.json(results);
+//   });
+// });
+
+// // Login user endpoint
+// app.post("/loginuser", (req, res) => {
+//   const { email, password } = req.body;
+  
+//   // Validate input
+//   if (!email || !password) {
+//     return res.status(400).json({ message: "Email and password are required" });
+//   }
+
+//   // Query to get user with the provided email
+//   const sql = "SELECT * FROM users WHERE email = ?";
+  
+//   db.query(sql, [email], (err, results) => {
+//     if (err) {
+//       console.error("Database error:", err);
+//       return res.status(500).json({ message: "Server error" });
+//     }
+
+//     // Check if user exists
+//     if (results.length === 0) {
+//       return res.status(401).json({ message: "Invalid email or password" });
+//     }
+
+//     const user = results[0];
+    
+//     // In a real application, you should hash passwords and verify them
+//     // For example, with bcrypt:
+//     // const passwordMatch = await bcrypt.compare(password, user.password);
+    
+//     // For simplicity, we're doing a direct comparison here
+//     // Replace this with proper password verification in production
+//     if (user.password !== password) {
+//       return res.status(401).json({ message: "Invalid email or password" });
+//     }
+
+//     // Generate a JWT token for authentication (recommended)
+//     // const token = jwt.sign(
+//     //   { userId: user.id, role: user.role },
+//     //   process.env.JWT_SECRET || 'your_jwt_secret',
+//     //   { expiresIn: '1h' }
+//     // );
+    
+//     // Determine redirect URL based on role
+//     let redirectUrl;
+//     switch (user.role) {
+//       case 'site_admin':
+//         redirectUrl = '/admin';
+//         break;
+//       case 'college_admin':
+//         redirectUrl = '/admin';
+//         break;
+//       case 'teacher':
+//         redirectUrl = '/teacher';
+//         break;
+//       case 'student':
+//         redirectUrl = '/student';
+//         break;
+//       default:
+//         redirectUrl = '/';
+//     }
+
+//     // Send response with user info and redirect URL
+//     return res.status(200).json({
+//       message: "Login successful",
+//       userId: user.id,
+//       name: user.name,
+//       role: user.role,
+//       // token: token, // Uncomment if using JWT
+//       redirectTo: redirectUrl
+//     });
+//   });
+// });
+// app.listen(5000, () => console.log("Server running on port 5000"));
+
+
+
+
+
+
+
+
+
 require("dotenv").config();
-
-// Add this check after dotenv config
-if (!process.env.JWT_SECRET) {
-  console.error("JWT_SECRET is not defined in .env file");
-  process.exit(1);
-}
-
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Environment check
+if (!process.env.JWT_SECRET) {
+  console.error("JWT_SECRET is not defined in .env file");
+  process.exit(1);
+}
+
+// MySQL DB Connection
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "thanji830",
-  database: "college_management",
+  database: "collegetool",
 });
 
 db.connect((err) => {
   if (err) throw err;
   console.log("Connected to MySQL Database");
+  initializeDatabase(); // Ensure tables and default admin
 });
 
-// Middleware to verify JWT token
-const verifyToken = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1];
-  if (!token) return res.status(403).json({ message: "No token provided" });
+// Create tables if they don't exist
+const initializeDatabase = () => {
+  const createAdminsTable = `
+    CREATE TABLE IF NOT EXISTS admins (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      role ENUM('site_admin', 'college_admin') NOT NULL
+    )
+  `;
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(500).json({ message: "Failed to authenticate token" });
-    req.userId = decoded.id;
-    req.userRole = decoded.role;
-    next();
+  const createUsersTable = `
+    CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      role ENUM('student', 'teacher', 'college_admin', 'site_admin') NOT NULL
+    )
+  `;
+
+  db.query(createAdminsTable, (err) => {
+    if (err) console.error("Error creating admins table:", err);
+    else console.log("Admins table ensured");
+  });
+
+  db.query(createUsersTable, (err) => {
+    if (err) console.error("Error creating users table:", err);
+    else console.log("Users table ensured");
+  });
+
+  // Insert default site admin if not exists
+  const insertDefaultAdmin = `
+    INSERT INTO admins (name, email, password, role)
+    SELECT * FROM (SELECT 'Super Admin', 'admin@example.com', ?, 'site_admin') AS tmp
+    WHERE NOT EXISTS (
+      SELECT email FROM admins WHERE email = 'admin@example.com'
+    ) LIMIT 1
+  `;
+
+  bcrypt.hash("admin123", 10).then((hashedPwd) => {
+    db.query(insertDefaultAdmin, [hashedPwd], (err) => {
+      if (err) console.error("Error inserting default admin:", err);
+      else console.log("Default admin ensured");
+    });
   });
 };
 
-// Register Admin (Site or College)
+// Middleware to verify JWT
+// const verifyToken = (req, res, next) => {
+//   const token = req.headers["authorization"]?.split(" ")[1];
+//   if (!token) return res.status(403).json({ message: "No token provided" });
+
+//   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+//     if (err) return res.status(500).json({ message: "Invalid token" });
+//     req.userId = decoded.id;
+//     req.userRole = decoded.role;
+//     next();
+//   });
+// };
+
+// Register Admin
 app.post("/register", async (req, res) => {
   const { name, email, password, role } = req.body;
   if (!["site_admin", "college_admin"].includes(role)) {
@@ -49,8 +308,7 @@ app.post("/register", async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const sql = "INSERT INTO admins (name, email, password, role) VALUES (?, ?, ?, ?)";
-  
-  db.query(sql, [name, email, hashedPassword, role], (err, result) => {
+  db.query(sql, [name, email, hashedPassword, role], (err) => {
     if (err) return res.status(500).json({ message: "Error registering admin" });
     res.json({ message: "Admin registered successfully" });
   });
@@ -60,7 +318,7 @@ app.post("/register", async (req, res) => {
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
   const sql = "SELECT * FROM admins WHERE email = ?";
-  
+
   db.query(sql, [email], async (err, results) => {
     if (err || results.length === 0) return res.status(401).json({ message: "Invalid credentials" });
 
@@ -73,127 +331,130 @@ app.post("/login", (req, res) => {
   });
 });
 
-//Admin Adding users
+// Admin creates user
 app.post("/create-user", (req, res) => {
   const { name, email, password, role } = req.body;
-  
-  // Basic validation
+
   if (!name || !email || !password || !role) {
     return res.status(400).json({ message: "All fields are required" });
   }
-  
-  // Check if email already exists
+
   const checkEmailSql = "SELECT * FROM users WHERE email = ?";
   db.query(checkEmailSql, [email], (err, results) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ message: "Server error" });
-    }
-    
+    if (err) return res.status(500).json({ message: "Server error" });
+
     if (results.length > 0) {
       return res.status(409).json({ message: "Email already in use" });
     }
-    
-    // Email doesn't exist, proceed with insertion
+
     const insertSql = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
     db.query(insertSql, [name, email, password, role], (insertErr, result) => {
-      if (insertErr) {
-        console.error("Error creating user:", insertErr);
-        return res.status(500).json({ message: "Failed to create user" });
-      }
-      
-      return res.status(201).json({ 
-        message: "User created successfully", 
-        userId: result.insertId 
+      if (insertErr) return res.status(500).json({ message: "Failed to create user" });
+
+      res.status(201).json({
+        message: "User created successfully",
+        userId: result.insertId,
       });
     });
   });
 });
 
-// Endpoint to fetch all users
+// Fetch all users
 app.get("/users", (req, res) => {
   const sql = "SELECT id, name, email, role FROM users";
-  
   db.query(sql, (err, results) => {
-    if (err) {
-      console.error("Error fetching users:", err);
-      return res.status(500).json({ message: "Failed to fetch users" });
-    }
-    
-    return res.json(results);
+    if (err) return res.status(500).json({ message: "Failed to fetch users" });
+    res.json(results);
   });
 });
 
-// Login user endpoint
+// User Login
 app.post("/loginuser", (req, res) => {
   const { email, password } = req.body;
-  
-  // Validate input
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email and password are required" });
-  }
 
-  // Query to get user with the provided email
+  if (!email || !password) return res.status(400).json({ message: "Email and password are required" });
+
   const sql = "SELECT * FROM users WHERE email = ?";
-  
   db.query(sql, [email], (err, results) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ message: "Server error" });
-    }
+    if (err) return res.status(500).json({ message: "Server error" });
 
-    // Check if user exists
-    if (results.length === 0) {
-      return res.status(401).json({ message: "Invalid email or password" });
-    }
+    if (results.length === 0) return res.status(401).json({ message: "Invalid email or password" });
 
     const user = results[0];
-    
-    // In a real application, you should hash passwords and verify them
-    // For example, with bcrypt:
-    // const passwordMatch = await bcrypt.compare(password, user.password);
-    
-    // For simplicity, we're doing a direct comparison here
-    // Replace this with proper password verification in production
+
+    // You should hash and compare passwords in production
     if (user.password !== password) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Generate a JWT token for authentication (recommended)
-    // const token = jwt.sign(
-    //   { userId: user.id, role: user.role },
-    //   process.env.JWT_SECRET || 'your_jwt_secret',
-    //   { expiresIn: '1h' }
-    // );
-    
-    // Determine redirect URL based on role
-    let redirectUrl;
+    let redirectUrl = "/";
     switch (user.role) {
-      case 'site_admin':
-        redirectUrl = '/admin';
+      case "site_admin":
+      case "college_admin":
+        redirectUrl = "/admin";
         break;
-      case 'college_admin':
-        redirectUrl = '/admin';
+      case "teacher":
+        redirectUrl = "/teacher";
         break;
-      case 'teacher':
-        redirectUrl = '/teacher';
+      case "student":
+        redirectUrl = "/student";
         break;
-      case 'student':
-        redirectUrl = '/student';
-        break;
-      default:
-        redirectUrl = '/';
     }
 
-    // Send response with user info and redirect URL
-    return res.status(200).json({
+    res.status(200).json({
       message: "Login successful",
       userId: user.id,
       name: user.name,
       role: user.role,
-      // token: token, // Uncomment if using JWT
-      redirectTo: redirectUrl
+      redirectTo: redirectUrl,
     });
   });
 });
-app.listen(5000, () => console.log("Server running on port 5000"));
+
+// Start server
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// require('dotenv').config();
+// const express = require('express');
+// const cors = require('cors');
+// const { initializeDatabase } = require('./utils/initDb');
+
+// // Import routes
+// const authRoutes = require('./routes/authRoutes');
+// const userRoutes = require('./routes/userRoutes');
+// const adminRoutes = require('./routes/adminRoutes');
+
+// // Initialize express app
+// const app = express();
+// app.use(express.json());
+// app.use(cors());
+
+// // Initialize database
+// initializeDatabase();
+
+// // Routes
+// app.use('/api/auth', authRoutes);
+// app.use('/api/users', userRoutes);
+// app.use('/api/admin', adminRoutes);
+
+// // Start server
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
