@@ -1,371 +1,273 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  getAllTimeSlots, 
-  getTimeSlotsByExamType, 
-  getTimeSlotsByDateRange,
-  createBooking,
-  getStudentByRegistrationNumber,
-  getAllSubjects,
-  getExamsByType
-} from './api';
+import React, { useEffect, useState } from 'react';
 import './SlotBooking.css';
-
-const SlotBooking = () => {
-  // State variables
-  const [timeSlots, setTimeSlots] = useState([]);
+export default function SlotBooking() {
+  const [allStudents, setAllStudents] = useState([]);
+  const [displayedStudents, setDisplayedStudents] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  const [exams, setExams] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [student, setStudent] = useState(null);
-  
-  // Form state
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [showSubjects, setShowSubjects] = useState(false);
+  const [showSlots, setShowSlots] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [bookingResponse, setBookingResponse] = useState(null);
   const [formData, setFormData] = useState({
-    registrationNumber: '',
-    examType: 'THEORY', // Default to THEORY
+    studentId: '',
     subjectId: '',
-    timeSlotId: '',
-    startDate: '',
-    endDate: ''
+    timeSlotId: ''
   });
+  const [formError, setFormError] = useState('');
 
-  // Filter options
-  const examTypes = ['THEORY', 'PRACTICAL', 'VIVA'];
-
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    
-    // Clear success/error messages when form changes
-    setSuccess('');
-    setError('');
-
-    // If exam type changes, fetch relevant subjects and slots
-    if (name === 'examType') {
-      fetchExamsByType(value);
-      if (formData.startDate && formData.endDate) {
-        fetchTimeSlotsByDateRange(formData.startDate, formData.endDate, value);
-      } else {
-        fetchTimeSlotsByExamType(value);
-      }
-    }
-    
-    // If date range changes, fetch timeslots for that range
-    if ((name === 'startDate' || name === 'endDate') && formData.examType) {
-      const startDate = name === 'startDate' ? value : formData.startDate;
-      const endDate = name === 'endDate' ? value : formData.endDate;
-      
-      if (startDate && endDate) {
-        fetchTimeSlotsByDateRange(startDate, endDate, formData.examType);
-      }
-    }
-  };
-
-  // Fetch all available subjects on component mount
   useEffect(() => {
-    fetchAllSubjects();
-    fetchExamsByType('THEORY'); // Default exam type
-    fetchAllTimeSlots();
+    fetch('http://localhost:8080/api/students')
+      .then(response => response.json())
+      .then(data => {
+        setAllStudents(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching student data:', error);
+        setLoading(false);
+      });
   }, []);
 
-  // Fetch all subjects
-  const fetchAllSubjects = async () => {
-    try {
-      setLoading(true);
-      const response = await getAllSubjects();
-      setSubjects(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError('Failed to fetch subjects');
-      setLoading(false);
-    }
+  const handleShowAllStudents = () => {
+    setDisplayedStudents(allStudents);
+    setShowSubjects(false);
+    setShowSlots(false);
+    setBookingResponse(null);
   };
 
-  // Fetch exams by type
-  const fetchExamsByType = async (examType) => {
-    try {
-      setLoading(true);
-      const response = await getExamsByType(examType);
-      setExams(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError('Failed to fetch exams');
-      setLoading(false);
-    }
-  };
-
-  // Fetch all time slots
-  const fetchAllTimeSlots = async () => {
-    try {
-      setLoading(true);
-      const response = await getAllTimeSlots();
-      setTimeSlots(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError('Failed to fetch time slots');
-      setLoading(false);
-    }
-  };
-
-  // Fetch time slots by exam type
-  const fetchTimeSlotsByExamType = async (examType) => {
-    try {
-      setLoading(true);
-      const response = await getTimeSlotsByExamType(examType);
-      setTimeSlots(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError('Failed to fetch time slots for the selected exam type');
-      setLoading(false);
-    }
-  };
-
-  // Fetch time slots by date range
-  const fetchTimeSlotsByDateRange = async (startDate, endDate, examType) => {
-    try {
-      setLoading(true);
-      const response = await getTimeSlotsByDateRange(startDate, endDate, examType);
-      setTimeSlots(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError('Failed to fetch time slots for the selected date range');
-      setLoading(false);
-    }
-  };
-
-  // Fetch student by registration number
-  const fetchStudentByRegistrationNumber = async () => {
-    if (!formData.registrationNumber) {
-      setError('Please enter a registration number');
-      return;
-    }
-    
-    try {
-      setLoading(true);
-      const response = await getStudentByRegistrationNumber(formData.registrationNumber);
-      setStudent(response.data);
-      setLoading(false);
-      setError('');
-    } catch (err) {
-      setStudent(null);
-      setError('Student not found. Please check the registration number.');
-      setLoading(false);
-    }
-  };
-
-  // Handle booking submission
-  const handleBookSlot = async (e) => {
-    e.preventDefault();
-    
-    // Validation
-    if (!student) {
-      setError('Please verify student registration number first');
-      return;
-    }
-    
-    if (!formData.subjectId) {
-      setError('Please select a subject');
-      return;
-    }
-    
-    if (!formData.timeSlotId) {
-      setError('Please select a time slot');
-      return;
-    }
-    
-    // Create booking object
-    const bookingData = {
-      studentId: student.id,
-      subjectId: formData.subjectId,
-      timeSlotId: formData.timeSlotId,
-      bookingStatus: 'CONFIRMED'
-    };
-    
-    try {
-      setLoading(true);
-      await createBooking(bookingData);
-      setSuccess('Slot booked successfully!');
-      
-      // Reset form after successful booking
-      setFormData({
-        ...formData,
-        subjectId: '',
-        timeSlotId: ''
+  const handleShowAllSubjects = () => {
+    fetch('http://localhost:8080/api/subjects')
+      .then(response => response.json())
+      .then(data => {
+        setSubjects(data);
+        setShowSubjects(true);
+        setShowSlots(false);
+        setBookingResponse(null);
+      })
+      .catch(error => {
+        console.error('Error fetching subject data:', error);
       });
-      
-      // Refresh timeslots to show updated availability
-      if (formData.startDate && formData.endDate) {
-        fetchTimeSlotsByDateRange(formData.startDate, formData.endDate, formData.examType);
-      } else {
-        fetchTimeSlotsByExamType(formData.examType);
-      }
-      
-      setLoading(false);
-    } catch (err) {
-      setError('Failed to book slot. Please try again.');
-      setLoading(false);
-    }
   };
 
-  // Format date for display
-  const formatDate = (dateString) => {
-    const options = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+  const handleShowAllSlots = () => {
+    fetch('http://localhost:8080/api/timeslots')
+      .then(response => response.json())
+      .then(data => {
+        setTimeSlots(Array.isArray(data) ? data : [data]);
+        setShowSlots(true);
+        setShowSubjects(false);
+        setBookingResponse(null);
+      })
+      .catch(error => {
+        console.error('Error fetching timeslot data:', error);
+      });
+  };
+
+  const handleClose = () => {
+    const student = allStudents.find(s => s.id === 5);
+    setDisplayedStudents(student ? [student] : []);
+    setShowSubjects(false);
+    setShowSlots(false);
+    setBookingResponse(null);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFormError('');
+    setBookingResponse(null);
+
+    if (!formData.studentId || !formData.subjectId || !formData.timeSlotId) {
+      setFormError('All fields are required.');
+      return;
+    }
+
+    fetch('http://localhost:8080/api/bookings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        studentId: parseInt(formData.studentId),
+        subjectId: parseInt(formData.subjectId),
+        timeSlotId: parseInt(formData.timeSlotId),
+      }),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Booking failed.');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setBookingResponse(data);
+        setFormData({ studentId: '', subjectId: '', timeSlotId: '' });
+      })
+      .catch(error => {
+        console.error('Error creating booking:', error);
+        setFormError('Failed to create booking. Please try again.');
+      });
   };
 
   return (
-    <div className="slot-booking-container">
-      <h2>Exam Slot Booking</h2>
-      
-      {/* Student verification section */}
-      <div className="verification-section">
-        <h3>Student Verification</h3>
-        <div className="input-group">
-          <label>Registration Number:</label>
-          <div className="verification-input">
-            <input
-              type="text"
-              name="registrationNumber"
-              value={formData.registrationNumber}
-              onChange={handleInputChange}
-              placeholder="Enter registration number"
-              required
-            />
-            <button 
-              onClick={fetchStudentByRegistrationNumber}
-              disabled={loading}
-              className="verify-btn"
-            >
-              Verify
-            </button>
-          </div>
-        </div>
-        
-        {student && (
-          <div className="student-info">
-            <h4>Student Information:</h4>
-            <p><strong>Name:</strong> {student.firstName} {student.lastName}</p>
-            <p><strong>Email:</strong> {student.email}</p>
-            <p><strong>Group:</strong> {student.group}</p>
-          </div>
-        )}
-      </div>
-      
-      {/* Booking form */}
-      <form onSubmit={handleBookSlot} className="booking-form">
-        <h3>Booking Details</h3>
-        
-        <div className="input-group">
-          <label>Exam Type:</label>
-          <select
-            name="examType"
-            value={formData.examType}
-            onChange={handleInputChange}
-            required
-          >
-            {examTypes.map((type) => (
-              <option key={type} value={type}>{type}</option>
-            ))}
-          </select>
-        </div>
-        
-        <div className="input-group">
-          <label>Subject:</label>
-          <select
-            name="subjectId"
-            value={formData.subjectId}
-            onChange={handleInputChange}
-            required
-            disabled={!student}
-          >
-            <option value="">Select Subject</option>
-            {subjects
-              .filter(subject => student ? subject.group === student.group : true)
-              .map((subject) => (
-                <option key={subject.id} value={subject.id}>
-                  {subject.name} ({subject.code})
-                </option>
-              ))}
-          </select>
-        </div>
-        
-        <div className="date-filter">
-          <h4>Filter by Date Range (Optional)</h4>
-          <div className="date-inputs">
-            <div className="input-group">
-              <label>From:</label>
-              <input
-                type="date"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleInputChange}
-              />
-            </div>
-            
-            <div className="input-group">
-              <label>To:</label>
-              <input
-                type="date"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-        </div>
-        
-        <div className="time-slots-section">
-          <h3>Available Time Slots</h3>
-          {loading ? (
-            <p className="loading">Loading available slots...</p>
-          ) : timeSlots.length > 0 ? (
-            <div className="time-slots-grid">
-              {timeSlots.map((slot) => (
-                <div 
-                  key={slot.id} 
-                  className={`time-slot ${formData.timeSlotId === slot.id ? 'selected' : ''} ${slot.availableSeats === 0 ? 'booked' : ''}`}
-                  onClick={() => {
-                    if (slot.availableSeats > 0) {
-                      setFormData({ ...formData, timeSlotId: slot.id });
-                    }
-                  }}
-                >
-                  <p className="slot-date">{formatDate(slot.startTime)}</p>
-                  <p className="slot-duration">Duration: {slot.durationMinutes} minutes</p>
-                  <p className="slot-availability">
-                    Available Seats: {slot.availableSeats}/{slot.totalSeats}
-                  </p>
-                  <p className="slot-room">Room: {slot.room}</p>
-                  {slot.availableSeats === 0 && <span className="fully-booked">Fully Booked</span>}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="no-slots">No available time slots found for selected criteria.</p>
-          )}
-        </div>
-        
-        {error && <div className="error-message">{error}</div>}
-        {success && <div className="success-message">{success}</div>}
-        
-        <button 
-          type="submit" 
-          className="book-btn"
-          disabled={loading || !student || !formData.subjectId || !formData.timeSlotId}
+    <div className="slotbooking-fullscreen min-h-screen min-w-screen flex flex-col justify-start items-center bg-gray-100 p-0 m-0">
+      <div className="flex justify-between mb-6">
+        <button
+          onClick={handleShowAllStudents}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
         >
-          {loading ? 'Booking...' : 'Book Slot'}
+          All Students
         </button>
-      </form>
+        <div className="flex space-x-2">
+          <button
+            onClick={handleShowAllSubjects}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+          >
+            All Subjects
+          </button>
+          <button
+            onClick={handleShowAllSlots}
+            className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded"
+          >
+            All Slots
+          </button>
+        </div>
+      </div>
+      <div className="flex justify-center mb-6">
+        <button
+          onClick={handleClose}
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+        >
+          Close
+        </button>
+      </div>
+
+      <div className="mb-6">
+        <h2 className="text-xl font-bold text-gray-700 mb-4">Create Booking</h2>
+        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-xl p-4">
+          <div className="grid gap-4 md:grid-cols-3">
+            <div>
+              <label className="block text-gray-700">Student ID</label>
+              <input
+                type="number"
+                name="studentId"
+                value={formData.studentId}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                placeholder="Enter Student ID"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Subject ID</label>
+              <input
+                type="number"
+                name="subjectId"
+                value={formData.subjectId}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                placeholder="Enter Subject ID"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Slot ID</label>
+              <input
+                type="number"
+                name="timeSlotId"
+                value={formData.timeSlotId}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                placeholder="Enter Slot ID"
+              />
+            </div>
+          </div>
+          {formError && <p className="text-red-500 mt-2">{formError}</p>}
+          <button
+            type="submit"
+            className="mt-4 bg-indigo-500 hover:bg-indigo-600 W-6 text-white px-4 py-2 rounded"
+          >
+            Submit Booking
+          </button>
+        </form>
+      </div>
+
+      {bookingResponse && (
+        <div className="mb-6">
+          <h2 className="text-xl font-bold text-indigo-700 mb-4">Booking Confirmation</h2>
+          <div className="bg-white shadow-md rounded-xl p-4">
+            <p><strong>Booking ID:</strong> {bookingResponse.id}</p>
+            <p><strong>Student ID:</strong> {bookingResponse.studentId}</p>
+            <p><strong>Student Name:</strong> {bookingResponse.studentName}</p>
+            <p><strong>Registration Number:</strong> {bookingResponse.registrationNumber}</p>
+            <p><strong>Subject ID:</strong> {bookingResponse.subjectId}</p>
+            <p><strong>Subject Code:</strong> {bookingResponse.subjectCode}</p>
+            <p><strong>Subject Name:</strong> {bookingResponse.subjectName}</p>
+            <p><strong>Subject Group:</strong> {bookingResponse.subjectGroup}</p>
+            <p><strong>Time Slot ID:</strong> {bookingResponse.timeSlotId}</p>
+            <p><strong>Exam Date:</strong> {bookingResponse.examDate}</p>
+            <p><strong>Start Time:</strong> {bookingResponse.startTime}</p>
+            <p><strong>End Time:</strong> {bookingResponse.endTime}</p>
+            <p><strong>Exam Type:</strong> {bookingResponse.examType}</p>
+            <p><strong>Exam Hall:</strong> {bookingResponse.examHall}</p>
+            <p><strong>Booking Time:</strong> {bookingResponse.bookingTime}</p>
+            <p><strong>Status:</strong> {bookingResponse.status}</p>
+          </div>
+        </div>
+      )}
+
+      {loading ? (
+        <p className="text-gray-600 text-lg">Loading student data...</p>
+      ) : showSlots ? (
+        <div className="grid gap-4 md:grid-cols-2">
+          {timeSlots.map(slot => (
+            <div key={slot.id} className="bg-white shadow-md rounded-xl p-4">
+              <h2 className="text-xl font-bold text-purple-700">Time Slot Details</h2>
+              <p><strong>ID:</strong> {slot.id}</p>
+              <p><strong>Date:</strong> {slot.date}</p>
+              <p><strong>Start Time:</strong> {slot.startTime}</p>
+              <p><strong>End Time:</strong> {slot.endTime}</p>
+              <p><strong>Exam ID:</strong> {slot.examId}</p>
+              <p><strong>Exam Type:</strong> {slot.examType}</p>
+              <p><strong>Exam Hall:</strong> {slot.examHall}</p>
+              <p><strong>Capacity:</strong> {slot.capacity}</p>
+              <p><strong>Booked Seats:</strong> {slot.bookedSeats}</p>
+              <p><strong>Available Seats:</strong> {slot.availableSeats}</p>
+            </div>
+          ))}
+        </div>
+      ) : showSubjects ? (
+        <div className="grid gap-4 md:grid-cols-2">
+          {subjects.map(subject => (
+            <div key={subject.id} className="bg-white shadow-md rounded-xl p-4">
+              <h2 className="text-xl font-bold text-green-700">Subject Info</h2>
+              <p><strong>ID:</strong> {subject.id}</p>
+              <p><strong>Code:</strong> {subject.code}</p>
+              <p><strong>Name:</strong> {subject.name}</p>
+              <p><strong>Group:</strong> {subject.group}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        displayedStudents.length > 0 ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            {displayedStudents.map(student => (
+              <div key={student.id} className="bg-white shadow-md rounded-xl p-4">
+                <h2 className="text-xl font-bold text-blue-700">Student Slot Details</h2>
+                <p><strong>ID:</strong> {student.id}</p>
+                <p><strong>Name:</strong> {student.name}</p>
+                <p><strong>Reg. No:</strong> {student.registrationNumber}</p>
+                <p><strong>Department:</strong> {student.department}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-red-500">No student found.</p>
+        )
+      )}
     </div>
   );
-};
-
-export default SlotBooking;
+}

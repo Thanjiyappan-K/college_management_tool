@@ -1,230 +1,235 @@
-/* SlotBooking.css */
-.slot-booking-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Arial', sans-serif;
+/* Importing Tailwind CSS and Framer Motion styles */
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+/* Root styles for the component */
+.min-h-screen {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+  padding: 2rem;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Button styles with Framer Motion animations */
+button {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+button.bg-blue-500 {
+  background: linear-gradient(45deg, #3b82f6, #60a5fa);
+}
+
+button.bg-blue-500:hover {
+  background: linear-gradient(45deg, #2563eb, #3b82f6);
+}
+
+button.bg-green-500 {
+  background: linear-gradient(45deg, #10b981, #34d399);
+}
+
+button.bg-green-500:hover {
+  background: linear-gradient(45deg, #059669, #10b981);
+}
+
+button.bg-purple-500 {
+  background: linear-gradient(45deg, #8b5cf6, #a78bfa);
+}
+
+button.bg-purple-500:hover {
+  background: linear-gradient(45deg, #7c3aed, #8b5cf6);
+}
+
+button.bg-red-500 {
+  background: linear-gradient(45deg, #ef4444, #f87171);
+}
+
+button.bg-red-500:hover {
+  background: linear-gradient(45deg, #dc2626, #ef4444);
+}
+
+button.bg-indigo-500 {
+  background: linear-gradient(45deg, #6366f1, #818cf8);
+}
+
+button.bg-indigo-500:hover {
+  background: linear-gradient(45deg, #4f46e5, #6366f1);
+}
+
+/* Card styles for students, subjects, slots, and booking response */
+.bg-white {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-white:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Header styles for cards */
+.text-xl.font-bold {
+  position: relative;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.text-blue-700::after,
+.text-green-700::after,
+.text-purple-700::after,
+.text-indigo-700::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.text-blue-700::after {
+  background: #3b82f6;
+}
+
+.text-green-700::after {
+  background: #10b981;
+}
+
+.text-purple-700::after {
+  background: #8b5cf6;
+}
+
+.text-indigo-700::after {
+  background: #6366f1;
+}
+
+/* Form styles */
+form.bg-white {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+}
+
+input {
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Error and loading text */
+.text-red-500 {
+  font-weight: 500;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.text-gray-600 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  animation: pulse 1.5s infinite;
+}
+
+/* Grid layout for cards */
+.grid.gap-4.md\:grid-cols-2 {
+  display: grid;
+  gap: 1.5rem;
+  animation: slideUp 0.5s ease-out;
+}
+
+@media (min-width: 768px) {
+  .grid.gap-4.md\:grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  h2 {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 28px;
+}
+
+/* Keyframe animations for Framer Motion-like effects */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  h3 {
-    color: #3498db;
-    margin-bottom: 15px;
-    font-size: 22px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  h4 {
-    color: #2c3e50;
-    margin-bottom: 10px;
-    font-size: 18px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .verification-section, .booking-form {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  to {
+    opacity: 1;
   }
-  
-  .input-group {
-    margin-bottom: 15px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
   }
-  
-  .input-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  input[type="text"],
-  input[type="date"],
-  select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  select {
-    background-color: white;
-  }
-  
-  .verification-input {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .verify-btn {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .verify-btn:hover {
-    background-color: #2980b9;
-  }
-  
-  .verify-btn:disabled {
-    background-color: #95a5a6;
-    cursor: not-allowed;
-  }
-  
-  .student-info {
-    background-color: #ecf0f1;
-    padding: 15px;
-    border-radius: 6px;
-    margin-top: 15px;
-  }
-  
-  .student-info p {
-    margin: 5px 0;
-  }
-  
-  .date-filter {
-    background-color: #f1f8fe;
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-  }
-  
-  .date-inputs {
-    display: flex;
-    gap: 15px;
-  }
-  
-  .date-inputs .input-group {
-    flex: 1;
-  }
-  
-  .time-slots-section {
-    margin-top: 25px;
-  }
-  
-  .time-slots-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
-  }
-  
-  .time-slot {
-    background-color: #f8f9fa;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    padding: 15px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .time-slot:hover {
-    border-color: #3498db;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .time-slot.selected {
-    border-color: #2ecc71;
-    background-color: #eafaf1;
-  }
-  
-  .time-slot.booked {
-    border-color: #e74c3c;
-    background-color: #fdedec;
+  50% {
     opacity: 0.7;
-    cursor: not-allowed;
   }
-  
-  .slot-date {
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 8px;
+}
+
+/* Additional motion effects for cards */
+.bg-white {
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Form input labels */
+label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .flex.space-x-2 {
+    flex-direction: column;
+    gap: 0.5rem;
   }
-  
-  .slot-duration, .slot-availability, .slot-room {
-    margin: 5px 0;
-    font-size: 14px;
+
+  .grid.gap-4.md\:grid-cols-3 {
+    grid-template-columns: 1fr;
   }
-  
-  .fully-booked {
-    display: inline-block;
-    background-color: #e74c3c;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    margin-top: 8px;
-  }
-  
-  .error-message {
-    background-color: #fdedec;
-    color: #e74c3c;
-    padding: 10px;
-    border-radius: 4px;
-    margin: 15px 0;
-    font-weight: bold;
-  }
-  
-  .success-message {
-    background-color: #eafaf1;
-    color: #2ecc71;
-    padding: 10px;
-    border-radius: 4px;
-    margin: 15px 0;
-    font-weight: bold;
-  }
-  
-  .loading, .no-slots {
-    text-align: center;
-    padding: 20px;
-    color: #7f8c8d;
-    font-style: italic;
-  }
-  
-  .book-btn {
-    background-color: #2ecc71;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    width: 100%;
-    margin-top: 20px;
-    transition: background-color 0.2s;
-  }
-  
-  .book-btn:hover {
-    background-color: #27ae60;
-  }
-  
-  .book-btn:disabled {
-    background-color: #95a5a6;
-    cursor: not-allowed;
-  }
-  
-  @media (max-width: 768px) {
-    .date-inputs {
-      flex-direction: column;
-      gap: 10px;
-    }
-    
-    .time-slots-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+}
+
+/* Fullscreen slot booking styles */
+.slotbooking-fullscreen {
+  min-height: 100vh !important;
+  min-width: 100vw !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+}

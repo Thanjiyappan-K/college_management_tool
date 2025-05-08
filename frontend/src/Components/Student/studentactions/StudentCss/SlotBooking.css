@@ -1,0 +1,235 @@
+/* Importing Tailwind CSS and Framer Motion styles */
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+/* Root styles for the component */
+.min-h-screen {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+  padding: 2rem;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Button styles with Framer Motion animations */
+button {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+button.bg-blue-500 {
+  background: linear-gradient(45deg, #3b82f6, #60a5fa);
+}
+
+button.bg-blue-500:hover {
+  background: linear-gradient(45deg, #2563eb, #3b82f6);
+}
+
+button.bg-green-500 {
+  background: linear-gradient(45deg, #10b981, #34d399);
+}
+
+button.bg-green-500:hover {
+  background: linear-gradient(45deg, #059669, #10b981);
+}
+
+button.bg-purple-500 {
+  background: linear-gradient(45deg, #8b5cf6, #a78bfa);
+}
+
+button.bg-purple-500:hover {
+  background: linear-gradient(45deg, #7c3aed, #8b5cf6);
+}
+
+button.bg-red-500 {
+  background: linear-gradient(45deg, #ef4444, #f87171);
+}
+
+button.bg-red-500:hover {
+  background: linear-gradient(45deg, #dc2626, #ef4444);
+}
+
+button.bg-indigo-500 {
+  background: linear-gradient(45deg, #6366f1, #818cf8);
+}
+
+button.bg-indigo-500:hover {
+  background: linear-gradient(45deg, #4f46e5, #6366f1);
+}
+
+/* Card styles for students, subjects, slots, and booking response */
+.bg-white {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-white:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Header styles for cards */
+.text-xl.font-bold {
+  position: relative;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.text-blue-700::after,
+.text-green-700::after,
+.text-purple-700::after,
+.text-indigo-700::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.text-blue-700::after {
+  background: #3b82f6;
+}
+
+.text-green-700::after {
+  background: #10b981;
+}
+
+.text-purple-700::after {
+  background: #8b5cf6;
+}
+
+.text-indigo-700::after {
+  background: #6366f1;
+}
+
+/* Form styles */
+form.bg-white {
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+}
+
+input {
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Error and loading text */
+.text-red-500 {
+  font-weight: 500;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.text-gray-600 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  animation: pulse 1.5s infinite;
+}
+
+/* Grid layout for cards */
+.grid.gap-4.md\:grid-cols-2 {
+  display: grid;
+  gap: 1.5rem;
+  animation: slideUp 0.5s ease-out;
+}
+
+@media (min-width: 768px) {
+  .grid.gap-4.md\:grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Keyframe animations for Framer Motion-like effects */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Additional motion effects for cards */
+.bg-white {
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Form input labels */
+label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .flex.space-x-2 {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .grid.gap-4.md\:grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Fullscreen slot booking styles */
+.slotbooking-fullscreen {
+  min-height: 100vh !important;
+  min-width: 100vw !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+}
