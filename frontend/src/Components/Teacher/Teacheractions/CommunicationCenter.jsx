@@ -1,8 +1,10 @@
 import React from "react";
+import { BsBell } from "react-icons/bs";
+import { HiUsers } from "react-icons/hi";
 import "../TeacherDashboard.css";
 
-
 const CommunicationCenter = () => (
+  <>
     <div className="communication-container">
       <h2>Communication</h2>
       
@@ -54,8 +56,8 @@ const CommunicationCenter = () => (
               <h3>Jane Doe</h3>
             </div>
             <div className="message-actions">
-              <button className="icon-btn"><Bell className="icon" /></button>
-              <button className="icon-btn"><Users className="icon" /></button>
+              <button className="icon-btn"><BsBell className="icon" /></button>
+              <button className="icon-btn"><HiUsers className="icon" /></button>
             </div>
           </div>
           
@@ -114,6 +116,6 @@ const CommunicationCenter = () => (
         </div>
       </div>
     </div>
+    </>
   );
   export default CommunicationCenter;
-  

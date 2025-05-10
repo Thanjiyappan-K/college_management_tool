@@ -1,12 +1,12 @@
 require("dotenv").config();
-import express, { json } from "express";
-import { createConnection } from "mysql2";
-import cors from "cors";
-import { hash, compare } from "bcryptjs";
-import { sign } from "jsonwebtoken";
+const express = require("express");
+const mysql = require("mysql2");
+const cors = require("cors");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const app = express();
-app.use(json());
+app.use(express.json());
 app.use(cors());
 
 // Environment check
@@ -16,7 +16,7 @@ if (!process.env.JWT_SECRET) {
 }
 
 // MySQL DB Connection
-const db = createConnection({
+const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "thanji830",
@@ -70,7 +70,7 @@ const initializeDatabase = () => {
     ) LIMIT 1
   `;
 
-  hash("admin123", 10).then((hashedPwd) => {
+  bcrypt.hash("admin123", 10).then((hashedPwd) => {
     db.query(insertDefaultAdmin, [hashedPwd], (err) => {
       if (err) console.error("Error inserting default admin:", err);
       else console.log("Default admin ensured");
@@ -98,7 +98,7 @@ app.post("/register", async (req, res) => {
     return res.status(400).json({ message: "Invalid role" });
   }
 
-  const hashedPassword = await hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
   const sql = "INSERT INTO admins (name, email, password, role) VALUES (?, ?, ?, ?)";
   db.query(sql, [name, email, hashedPassword, role], (err) => {
     if (err) return res.status(500).json({ message: "Error registering admin" });
@@ -115,10 +115,10 @@ app.post("/login", (req, res) => {
     if (err || results.length === 0) return res.status(401).json({ message: "Invalid credentials" });
 
     const admin = results[0];
-    const isMatch = await compare(password, admin.password);
+    const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
-    const token = sign({ id: admin.id, role: admin.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ id: admin.id, role: admin.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
     res.json({ message: "Login successful", token });
   });
 });
@@ -207,46 +207,3 @@ app.post("/loginuser", (req, res) => {
 app.listen(5000, () => {
   console.log("Server running on port 5000");
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// require('dotenv').config();
-// const express = require('express');
-// const cors = require('cors');
-// const { initializeDatabase } = require('./utils/initDb');
-
-// // Import routes
-// const authRoutes = require('./routes/authRoutes');
-// const userRoutes = require('./routes/userRoutes');
-// const adminRoutes = require('./routes/adminRoutes');
-
-// // Initialize express app
-// const app = express();
-// app.use(express.json());
-// app.use(cors());
-
-// // Initialize database
-// initializeDatabase();
-
-// // Routes
-// app.use('/api/auth', authRoutes);
-// app.use('/api/users', userRoutes);
-// app.use('/api/admin', adminRoutes);
-
-// // Start server
-// const PORT = process.env.PORT || 5000;
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
