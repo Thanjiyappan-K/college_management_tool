@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Bell, Search } from 'lucide-react';
+import { Bell, Search, Home, UserPlus, Users, BookOpen, Calendar, DollarSign, GraduationCap, Library, MessageSquare, BarChart2, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './CollegeAdminDashboard.css';
-import Adduser from './Adduser';
+import Adduser from './Adminactions/Adduser';
+import SlotManagement from './Adminactions/SlotManagement';
 const CollegeAdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const CollegeAdminDashboard = () => {
       case 'courses': return <CourseManagement />;
       case 'attendance': return <AttendanceManagement />;
       case 'fees': return <FeeManagement />;
-      case 'exams': return <ExaminationManagement />;
+      case 'exams': return <SlotManagement />;
       case 'library': return <LibraryManagement />;
       case 'communication': return <CommunicationCenter />;
       case 'reports': return <ReportsAnalytics />;
@@ -57,19 +58,78 @@ const CollegeAdminDashboard = () => {
       <div className="dashboard-main">
         <nav className="sidebar">
           <ul>
-            {['overview', 'adduser','students', 'teachers', 'courses', 'attendance', 'fees', 'exams', 'library', 'communication', 'reports', 'settings'].map(tab => (
-              <li key={tab} className={activeTab === tab ? 'active' : ''}>
-                <button onClick={() => {
-                  if (tab === 'adduser') {
-                    navigate('/admin/user');
-                  } else {
-                    setActiveTab(tab);
-                  }
-                }}>
-                  {tab.replace(/\b\w/g, c => c.toUpperCase())}
-                </button>
-              </li>
-            ))}
+            <li className={activeTab === 'overview' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('overview')}>
+                <Home className="nav-icon" />
+                <span>Overview</span>
+              </button>
+            </li>
+            <li className={activeTab === 'adduser' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('adduser')}>
+                <UserPlus className="nav-icon" />
+                <span>Add User</span>
+              </button>
+            </li>
+            <li className={activeTab === 'students' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('students')}>
+                <Users className="nav-icon" />
+                <span>Students</span>
+              </button>
+            </li>
+            <li className={activeTab === 'teachers' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('teachers')}>
+                <Users className="nav-icon" />
+                <span>Teachers</span>
+              </button>
+            </li>
+            <li className={activeTab === 'courses' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('courses')}>
+                <BookOpen className="nav-icon" />
+                <span>Courses</span>
+              </button>
+            </li>
+            <li className={activeTab === 'attendance' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('attendance')}>
+                <Calendar className="nav-icon" />
+                <span>Attendance</span>
+              </button>
+            </li>
+            <li className={activeTab === 'fees' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('fees')}>
+                <DollarSign className="nav-icon" />
+                <span>Fees</span>
+              </button>
+            </li>
+            <li className={activeTab === 'exams' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('exams')}>
+                <GraduationCap className="nav-icon" />
+                <span>Exams</span>
+              </button>
+            </li>
+            <li className={activeTab === 'library' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('library')}>
+                <Library className="nav-icon" />
+                <span>Library</span>
+              </button>
+            </li>
+            <li className={activeTab === 'communication' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('communication')}>
+                <MessageSquare className="nav-icon" />
+                <span>Communication</span>
+              </button>
+            </li>
+            <li className={activeTab === 'reports' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('reports')}>
+                <BarChart2 className="nav-icon" />
+                <span>Reports</span>
+              </button>
+            </li>
+            <li className={activeTab === 'settings' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('settings')}>
+                <Settings className="nav-icon" />
+                <span>Settings</span>
+              </button>
+            </li>
           </ul>
         </nav>
         <main className="dashboard-content">
@@ -88,7 +148,7 @@ const DashboardOverview = ({ stats }) => (
       <div className="stat-card">
         <div className="stat-icon student-icon">👨‍🎓</div>
         <div className="stat-content">
-          <h3>Total Students</h3>
+          <h3 style={{ color: '#000' }}>Total Students</h3>
           <p className="stat-value">{stats.totalStudents}</p>
         </div>
       </div>
@@ -204,12 +264,7 @@ const FeeManagement = () => (
   </div>
 );
 
-const ExaminationManagement = () => (
-  <div style={fullScreenStyle}>
-    <h2 style={headerStyle}>Examination & Grading</h2>
-    {/* Add your content here */}
-  </div>
-);
+
 
 const LibraryManagement = () => (
   <div style={fullScreenStyle}>

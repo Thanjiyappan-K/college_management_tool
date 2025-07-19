@@ -5,7 +5,6 @@ import Register from './Register'
 import './App.css' 
 import CollegeAdminDashboard from './Components/Admin/CollegeAdminDashboard.jsx'
 import StudentDashboard from './Components/Student/StudentDashboard.jsx'
-import Adduser from './Components/Admin/Adduser.jsx'
 import TeacherDashboard from './Components/Teacher/TeacherDashboard.jsx'
 import ParentDashboard from './Components/Parent/ParentDashboard .jsx'
 import Home from './Components/Home/Home.jsx'
@@ -21,7 +20,6 @@ function App() {
         <Route path="/loginuser" element={<UserLogin />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<CollegeAdminDashboard />} />
-        <Route path="/admin/user" element={<Adduser/>} />
         <Route path="/teacher" element={<TeacherDashboard />} />
         <Route path="/student" element={<StudentDashboard />} />
         <Route path="/parent" element={<ParentDashboard />} />

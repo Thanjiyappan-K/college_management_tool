@@ -1,0 +1,6 @@
+Type,Batch Name,Total Papers,Suspicious Cases,Analysis Date,Filename,Student Name,Registration Number,Word Count,Text Hash,Paper 1,Student 1,Paper 2,Student 2,Cosine Similarity,Jaccard Similarity,Common N-grams,Total N-grams,Similarity Type
+BATCH_SUMMARY,CS_Final_exam,0.0,0.0,2025-07-13 23:22:36,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+PAPER_INFO,,,,,FILENAME,STUDENT_NAME,REGISTRATION_NUMBER,WORD_COUNT,TEXT_HASH,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+SIMILARITY_RESULTS,,,,,,,,,,PAPER_1,STUDENT_1,PAPER_2,STUDENT_2,COSINE_SIMILARITY,JACCARD_SIMILARITY,COMMON_NGRAMS,TOTAL_NGRAMS,SIMILARITY_TYPE

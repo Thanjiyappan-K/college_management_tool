@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './TeacherDashboard.css';
 import DashboardOverview from './Teacheractions/DashboardOverview';
 import MyClasses from './Teacheractions/MyClasses ';
+import  Upload  from './Teacheractions/Upload';
 import AttendanceManagement from './Teacheractions/AttendanceManagement';
 import AssignmentsGrading from './Teacheractions/AssignmentsGrading';
 import ExamManagement from './Teacheractions/ExamManagement';
@@ -31,6 +32,7 @@ const TeacherDashboard = () => {
       case 'attendance': return <AttendanceManagement />;
       case 'assignments': return <AssignmentsGrading />;
       case 'exams': return <ExamManagement />;
+      case 'upload': return <Upload />;
       case 'communication': return <CommunicationCenter />;
       case 'profile': return <TeacherProfile />;
       default: return <DashboardOverview stats={teacherStats} />;
@@ -81,6 +83,12 @@ const TeacherDashboard = () => {
               <button onClick={() => setActiveTab('assignments')}>
                 <FileText className="nav-icon" />
                 <span>Assignments & Grading</span>
+              </button>
+            </li>
+            <li className={activeTab === 'upload' ? 'active' : ''}>
+              <button onClick={() => setActiveTab('upload')}>
+                <FileText className="nav-icon" />
+                <span>File Upload</span>
               </button>
             </li>
             <li className={activeTab === 'exams' ? 'active' : ''}>
