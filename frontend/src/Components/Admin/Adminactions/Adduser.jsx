@@ -22,7 +22,7 @@ const AddUser = () => {
   const fetchUsers = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get("http://localhost:5000/users");
+      const res = await axios.get("https://college-management-tool-2.onrender.com/users");
       setUsers(res.data);
     } catch (err) {
       console.error("Failed to fetch users", err);
