@@ -20,7 +20,7 @@ const UserLogin = () => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/loginuser", formData);
+      const res = await axios.post("https://college-management-tool-2.onrender.com/loginuser", formData);
 
       // Store user information in localStorage
       localStorage.setItem("userRole", res.data.role);
