@@ -16,7 +16,8 @@ const Register = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/register", formData);
+      // const res = await axios.post("http://localhost:5000/register", formData);
+      const res = await axios.post("https://college-management-tool-2.onrender.com/register", formData);
       alert(res.data.message);
     } catch (err) {
       alert("Registration failed");

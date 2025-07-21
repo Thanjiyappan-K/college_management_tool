@@ -14,7 +14,8 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/login", formData);
+      // const res = await axios.post("http://localhost:5000/login", formData);
+      const res = await axios.post("https://college-management-tool-2.onrender.com/login", formData);
       localStorage.setItem("token", res.data.token);
       alert(res.data.message);
       Navigate("/admin");
