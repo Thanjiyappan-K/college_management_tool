@@ -4,6 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import './CollegeAdminDashboard.css';
 import Adduser from './Adminactions/Adduser';
 import SlotManagement from './Adminactions/SlotManagement';
+import StudentManagement from './Adminactions/StudentManagement';
+import CourseManagement from './Adminactions/CourseManagement';
+import TeacherManagement from './Adminactions/TeacherManagement';
+import AttendanceManagement from './Adminactions/AttendanceManagement';
+import FeeManagement from './Adminactions/FeeManagement';
+import LibraryManagement from './Adminactions/LibraryManagement';
+import CommunicationCenter from './Adminactions/CommunicationCenter';
 const CollegeAdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const navigate = useNavigate();
@@ -22,7 +29,7 @@ const CollegeAdminDashboard = () => {
     switch (activeTab) {
       case 'overview': return <DashboardOverview stats={dashboardStats} />;
       case 'students': return <StudentManagement />;
-      case 'adduser': return <Adduser />;
+      case 'adduser': return <Adduser/>;
       case 'teachers': return <TeacherManagement />;
       case 'courses': return <CourseManagement />;
       case 'attendance': return <AttendanceManagement />;
@@ -140,79 +147,171 @@ const CollegeAdminDashboard = () => {
   );
 };
 
-const DashboardOverview = ({ stats }) => (
-  <div className="dashboard-overview">
-    <h2>Dashboard Overview</h2>
-    
-    <div className="stats-grid">
-      <div className="stat-card">
-        <div className="stat-icon student-icon">👨‍🎓</div>
-        <div className="stat-content">
-          <h3 style={{ color: '#000' }}>Total Students</h3>
-          <p className="stat-value">{stats.totalStudents}</p>
+const DashboardOverview = ({ stats }) => {
+  const KEYS = {
+    students: 'collegeAdmin.students',
+    payments: 'collegeAdmin.payments',
+    events: 'collegeAdmin.events',
+    announcements: 'collegeAdmin.announcements',
+  };
+
+  const appendToLocalStorage = (key, item) => {
+    try {
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      list.push(item);
+      localStorage.setItem(key, JSON.stringify(list));
+    } catch (err) {
+      console.error('LocalStorage error:', err);
+      alert('Unable to save. Please check browser storage settings.');
+    }
+  };
+
+  const handleAddStudent = () => {
+    const name = prompt('Enter student name:');
+    if (!name) return;
+
+    const roll = prompt('Enter roll number (optional):') || undefined;
+
+    appendToLocalStorage(KEYS.students, {
+      id: Date.now(),
+      name: name.trim(),
+      roll,
+      createdAt: new Date().toISOString(),
+    });
+
+    alert('Student added to local storage.');
+  };
+
+  const handleRecordPayment = () => {
+    const student = prompt('Enter student name/ID for payment:');
+    if (!student) return;
+
+    const amountStr = prompt('Enter amount:');
+    if (!amountStr) return;
+
+    const amount = parseFloat(amountStr);
+    if (isNaN(amount)) {
+      alert('Invalid amount.');
+      return;
+    }
+
+    appendToLocalStorage(KEYS.payments, {
+      id: Date.now(),
+      student: student.trim(),
+      amount,
+      createdAt: new Date().toISOString(),
+    });
+
+    alert('Payment recorded in local storage.');
+  };
+
+  const handleScheduleEvent = () => {
+    const title = prompt('Enter event title:');
+    if (!title) return;
+
+    const when = prompt('Enter event date/time (e.g., 2025-08-24 15:30):') || '';
+
+    appendToLocalStorage(KEYS.events, {
+      id: Date.now(),
+      title: title.trim(),
+      when,
+      createdAt: new Date().toISOString(),
+    });
+
+    alert('Event scheduled and saved to local storage.');
+  };
+
+  const handleCreateAnnouncement = () => {
+    const title = prompt('Enter announcement title:');
+    if (!title) return;
+
+    const message = prompt('Enter announcement message:');
+    if (!message) return;
+
+    appendToLocalStorage(KEYS.announcements, {
+      id: Date.now(),
+      title: title.trim(),
+      message: message.trim(),
+      createdAt: new Date().toISOString(),
+    });
+
+    alert('Announcement saved to local storage.');
+  };
+
+  return (
+    <div className="dashboard-overview">
+      <h2>Dashboard Overview</h2>
+      
+      <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-icon student-icon">👨‍🎓</div>
+          <div className="stat-content">
+            <h3 style={{ color: '#000' }}>Total Students</h3>
+            <p className="stat-value">{stats.totalStudents}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon teacher-icon">👩‍🏫</div>
+          <div className="stat-content">
+            <h3>Active Teachers</h3>
+            <p className="stat-value">{stats.activeTeachers}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon fee-icon">💰</div>
+          <div className="stat-content">
+            <h3>Pending Fees</h3>
+            <p className="stat-value">{stats.pendingFees}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon event-icon">📅</div>
+          <div className="stat-content">
+            <h3>Upcoming Events</h3>
+            <p className="stat-value">{stats.upcomingEvents}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon announcement-icon">📢</div>
+          <div className="stat-content">
+            <h3>Recent Announcements</h3>
+            <p className="stat-value">{stats.recentAnnouncements}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon attendance-icon">✓</div>
+          <div className="stat-content">
+            <h3>Attendance Rate</h3>
+            <p className="stat-value">{stats.attendanceRate}</p>
+          </div>
+        </div>
+        
+        <div className="stat-card">
+          <div className="stat-icon exam-icon">📝</div>
+          <div className="stat-content">
+            <h3>Exams Pending</h3>
+            <p className="stat-value">{stats.examsPending}</p>
+          </div>
         </div>
       </div>
       
-      <div className="stat-card">
-        <div className="stat-icon teacher-icon">👩‍🏫</div>
-        <div className="stat-content">
-          <h3>Active Teachers</h3>
-          <p className="stat-value">{stats.activeTeachers}</p>
-        </div>
-      </div>
-      
-      <div className="stat-card">
-        <div className="stat-icon fee-icon">💰</div>
-        <div className="stat-content">
-          <h3>Pending Fees</h3>
-          <p className="stat-value">{stats.pendingFees}</p>
-        </div>
-      </div>
-      
-      <div className="stat-card">
-        <div className="stat-icon event-icon">📅</div>
-        <div className="stat-content">
-          <h3>Upcoming Events</h3>
-          <p className="stat-value">{stats.upcomingEvents}</p>
-        </div>
-      </div>
-      
-      <div className="stat-card">
-        <div className="stat-icon announcement-icon">📢</div>
-        <div className="stat-content">
-          <h3>Recent Announcements</h3>
-          <p className="stat-value">{stats.recentAnnouncements}</p>
-        </div>
-      </div>
-      
-      <div className="stat-card">
-        <div className="stat-icon attendance-icon">✓</div>
-        <div className="stat-content">
-          <h3>Attendance Rate</h3>
-          <p className="stat-value">{stats.attendanceRate}</p>
-        </div>
-      </div>
-      
-      <div className="stat-card">
-        <div className="stat-icon exam-icon">📝</div>
-        <div className="stat-content">
-          <h3>Exams Pending</h3>
-          <p className="stat-value">{stats.examsPending}</p>
+      <div className="quick-actions">
+        <h3>Quick Actions</h3>
+        <div className="action-buttons">
+          <button className="action-btn" onClick={handleAddStudent}>Add New Student</button>
+          <button className="action-btn" onClick={handleRecordPayment}>Record Payment</button>
+          <button className="action-btn" onClick={handleScheduleEvent}>Schedule Event</button>
+          <button className="action-btn" onClick={handleCreateAnnouncement}>Create Announcement</button>
         </div>
       </div>
     </div>
-    
-    <div className="quick-actions">
-      <h3>Quick Actions</h3>
-      <div className="action-buttons">
-        <button className="action-btn">Add New Student</button>
-        <button className="action-btn">Record Payment</button>
-        <button className="action-btn">Schedule Event</button>
-        <button className="action-btn">Create Announcement</button>
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 
 const fullScreenStyle = {
   minHeight: '100%',
@@ -229,56 +328,6 @@ const headerStyle = {
   borderBottom: '2px solid #e2e8f0'
 };
 
-const StudentManagement = () => (
-  <div style={fullScreenStyle}>
-    <h2 style={headerStyle}>Student Management</h2>
-    {/* Add your content here */}
-  </div>
-);
-
-const TeacherManagement = () => (
-  <div style={fullScreenStyle}>
-    <h2 style={headerStyle}>Teacher Management</h2>
-    {/* Add your content here */}
-  </div>
-);
-
-const CourseManagement = () => (
-  <div style={fullScreenStyle}>
-    <h2 style={headerStyle}>Course Management</h2>
-    {/* Add your content here */}
-  </div>
-);
-
-const AttendanceManagement = () => (
-  <div style={fullScreenStyle}>
-    <h2 style={headerStyle}>Attendance Management</h2>
-    {/* Add your content here */}
-  </div>
-);
-
-const FeeManagement = () => (
-  <div style={fullScreenStyle}>
-    <h2 style={headerStyle}>Fee Management</h2>
-    {/* Add your content here */}
-  </div>
-);
-
-
-
-const LibraryManagement = () => (
-  <div style={fullScreenStyle}>
-    <h2 style={headerStyle}>Library Management</h2>
-    {/* Add your content here */}
-  </div>
-);
-
-const CommunicationCenter = () => (
-  <div style={fullScreenStyle}>
-    <h2 style={headerStyle}>Communication</h2>
-    {/* Add your content here */}
-  </div>
-);
 
 const ReportsAnalytics = () => (
   <div style={fullScreenStyle}>

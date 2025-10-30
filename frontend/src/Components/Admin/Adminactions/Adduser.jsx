@@ -77,8 +77,8 @@ const AddUser = () => {
 
     setIsLoading(true);
     try {
-      // const res = await axios.post("http://localhost:5000/create-user", formData);
-      const res = await axios.post("https://college-management-tool-2.onrender.com/create-user", formData);
+      const res = await axios.post("http://localhost:5000/create-user", formData);
+      // const res = await axios.post("https://college-management-tool-2.onrender.com/create-user", formData);
       
       // Show success message
       setMessage({ text: res.data.message, type: "success" });
@@ -165,6 +165,7 @@ const AddUser = () => {
           >
             <option value="student">Student</option>
             <option value="teacher">Teacher</option>
+            <option value="parent">Parent</option>
             <option value="college_admin">College Admin</option>
             <option value="site_admin">Site Admin</option>
           </select>
