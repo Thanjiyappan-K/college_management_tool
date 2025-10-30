@@ -234,6 +234,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Stripe = require("stripe");
 
 const app = express();
 app.use(express.json());
@@ -298,7 +299,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['student', 'teacher', 'college_admin', 'site_admin'],
+    enum: ['student', 'teacher', 'college_admin', 'site_admin','parent'],
     required: true
   }
 }, {
@@ -483,6 +484,9 @@ app.post("/loginuser", async (req, res) => {
       case "student":
         redirectUrl = "/student";
         break;
+      case "parent":
+        redirectUrl= "/parent";
+        break;  
     }
 
     res.status(200).json({
@@ -508,4 +512,57 @@ process.on('SIGINT', async () => {
 // Start server
 app.listen(5000, () => {
   console.log("Server running on port 5000");
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// ✅ Create a checkout session for payment
+app.post("/api/create-checkout-session", async (req, res) => {
+  try {
+    const { amount, feeType } = req.body;
+
+    // Stripe expects amount in cents (₹100 = 10000 paise)
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      line_items: [
+        {
+          price_data: {
+            currency: "inr", // or "usd"
+            product_data: {
+              name: feeType || "College Fee Payment",
+            },
+            unit_amount: amount * 100, // convert to cents/paise
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: "http://localhost:5173/student",
+      cancel_url: "http://localhost:5173/student",
+    });
+
+    res.json({ id: session.id, url: session.url });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/", (req, res) => {
+  res.send("Stripe test backend is running ✅");
 });
